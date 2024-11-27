@@ -1,5 +1,3 @@
-CREATE DATABASE obra_maestra;
-
 USE obra_maestra;
 
 CREATE TABLE users (
