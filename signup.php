@@ -1,31 +1,4 @@
-<?php
-include 'db.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = $_POST['email'];
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    if (strlen($password) < 7 || !preg_match('/[A-Z]/', $password) || 
-        !preg_match('/\d/', $password) || !preg_match('/[^a-zA-Z\d]/', $password)) {
-        echo "Password must be longer than 6 characters and include a capital letter, a number, and a special character.";
-    } else {
-        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-
-        try {
-            $stmt = $pdo->prepare("INSERT INTO users (email, username, password) VALUES (?, ?, ?)");
-            $stmt->execute([$email, $username, $hashedPassword]);
-            echo "Sign-up successful! <a href='signin.php'>Sign In</a>";
-        } catch (PDOException $e) {
-            if ($e->getCode() == 23000) {
-                echo "This email is already registered.";
-            } else {
-                echo "An error occurred: " . htmlspecialchars($e->getMessage());
-            }
-        }
-    }
-}
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -51,6 +24,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         <button type="submit">Sign Up</button>
     </form>
+
+    <?php
+    include 'db.php';
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $email = $_POST['email'];
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+
+        if (strlen($password) < 7 || !preg_match('/[A-Z]/', $password) || 
+            !preg_match('/\d/', $password) || !preg_match('/[^a-zA-Z\d]/', $password)) {
+            echo "Password must be longer than 6 characters and include a capital letter, a number, and a special character.";
+        } else {
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+
+            try {
+                $stmt = $pdo->prepare("INSERT INTO users (email, username, password) VALUES (?, ?, ?)");
+                $stmt->execute([$email, $username, $hashedPassword]);
+                echo "Sign-up successful! <a href='signin.php'>Sign In</a>";
+            } catch (PDOException $e) {
+                if ($e->getCode() == 23000) {
+                    echo "This email is already registered.";
+                } else {
+                    echo "An error occurred: " . htmlspecialchars($e->getMessage());
+                }
+            }
+        }
+    }
+    ?>
 
 </body>
 </html>

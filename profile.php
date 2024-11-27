@@ -1,11 +1,3 @@
-<?php
-    session_start();
-    if (!isset($_SESSION['user_id'])) {
-        header("Location: signin.php");
-        exit;
-    }
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,5 +9,12 @@
     <h1>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
     <a href="logout.php">Log Out</a>
 
+    <?php
+    session_start();
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: signin.php");
+        exit;
+    }
+    ?>
 </body>
 </html>
