@@ -13,13 +13,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($user && password_verify($password, $user['password'])) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
-        header("Location: profile.php");
+
+        // Check if the user is logging in for the first time
+        if ($user['is_first_time']) {
+            header("Location: profile.php");
+        } else {
+            header("Location: dashboard.php");
+        }
         exit;
     } else {
         echo "Invalid email or password.";
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
